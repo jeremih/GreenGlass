@@ -2,6 +2,8 @@
 
 This is a skeleton, based on ex1, of a small web drawing program in TypeScript.  This is the starting point for a0. 
 
+## Due: Wednesday Aug 26th, 11:59pm
+
 ## Overview 
 
 The goal of this assignment is have you get experience with Typescript, create a simple data structure common in graphics (a circular buffer), gain experience with the common structure of interactive graphical program (not just on the web), and ensure your development and debugging environments are set up before the first larger assignment.
