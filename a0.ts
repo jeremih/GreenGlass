@@ -65,8 +65,9 @@ class Drawing {
         // Restore the transform
         this.ctx.restore();        
         
-        // create a point for the current mouse position, after we get the first one, if the
-        // mouse is over the canvas.  If the mouse isn't over the canvas, drop the oldest point instead
+        // add a point to the points object for the current mouse position (if the mouse position
+        // is over the canvas and we've received it from onmousemove below).  
+        // If the mouse isn't over the canvas, drop the oldest point instead.
 
 
 
