@@ -12,7 +12,7 @@ function getRandomColor() {
     return color;
 }
 
-// a simple wrapper to reliably get the offset within an element  
+// a simple wrapper to reliably get the offset within an element
 // see: http://www.jacklmoore.com/notes/mouse-position/
 function getOffset(e: MouseEvent): ps.MousePosition {
     e = e || <MouseEvent> window.event;
@@ -37,7 +37,7 @@ interface Rectangle {
 class Drawing {
     // the public paramater "canv" is automatically created by "public" constructor parameter
 
-    // rendering context for the canvas    
+    // rendering context for the canvas
     ctx: CanvasRenderingContext2D;
 
     // last known mouse position
@@ -51,30 +51,43 @@ class Drawing {
 
     // the set of points trailing after the mouse
     points: ps.PointSet;
-    
+
     // use the animationFrame to do continuous rendering.  Call it once to get things going.
     render() {
         // Store the current transformation matrix (and other state)
         this.ctx.save();
-        
+
         // Use the identity matrix while clearing the canvas (just in case you change it someday!)
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.fillStyle = "lightgrey";
         this.ctx.clearRect(0, 0, this.canv.width, this.canv.height);
-        
+
         // Restore the transform
-        this.ctx.restore();        
-        
+        this.ctx.restore();
+
         // add a point to the points object for the current mouse position (if the mouse position
-        // is over the canvas and we've received it from onmousemove below).  
+        // is over the canvas and we've received it from onmousemove below).
         // If the mouse isn't over the canvas, drop the oldest point instead.
+        if (this.mousePosition != null) {
+            if (this.mousePosition.x < this.canv.width) {
+                if (this.mousePosition.y < this.canv.height) {
+                    this.points.addPoint(this.mousePosition);
+                    for (var i = 0; i < this.points.buffer.length; i++) {
+                        this.ctx.beginPath();
+                        this.ctx.arc(this.points.getPoint(i).x,
+                            this.points.getPoint(i).y,
+                            3, 0, 2 * Math.PI, false);
+                        this.ctx.fillStyle = "rgba(125,25, 125, 0.5)";
+                        this.ctx.fill();
+                    }
+                }
+            }
+        }
 
 
 
-        
         const rectCount = this.rects.length;
         // draw rectangles first
-         
 
 
 
@@ -82,31 +95,31 @@ class Drawing {
         // draw blue points with the oldest ones more transparent, 3x3 in size
         // hint: use the point number to create an rgba color
         // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgba()
-                    
+
 
 
         // if we've clicked, draw the rubber band.  use a strokeStyle of gray, and use strokeRect instead of fillRect
         if (this.clickStart) {
-            
-            
-            
+
+
+
         }
 
-        // do it again!  and again!  AND AGAIN!  AND ...       
+        // do it again!  and again!  AND AGAIN!  AND ...
         requestAnimationFrame(() => this.render());
     }
-    
+
     // constructor for our state object
     constructor (public canv: HTMLCanvasElement) {
         this.clickStart = undefined;
         this.ctx = canv.getContext("2d");
         this.rects = new Array(0);  // start with no rects
         this.points = new ps.PointSet();
- 
+
         canv.onmousedown = (ev: MouseEvent) => {
-             this.clickStart = getOffset(ev);        
+             this.clickStart = getOffset(ev);
         }
-        
+
         canv.onmouseup = (ev: MouseEvent) => {
             if (this.clickStart != undefined) {
                 const clickEnd = getOffset(ev);
@@ -114,17 +127,17 @@ class Drawing {
                     p1: this.clickStart,
                     p2: clickEnd,
                     color: getRandomColor()
-                };      
-                this.rects.push(rect);          
-                this.clickStart = undefined; 
+                };
+                this.rects.push(rect);
+                this.clickStart = undefined;
             }
         }
-        
+
         canv.onmousemove = (ev: MouseEvent) => {
             const m = getOffset(ev);
             this.mousePosition = m;
         }
-        
+
         canv.onmouseout = (ev: MouseEvent) => {
             this.mousePosition = undefined;
             this.clickStart = undefined;
@@ -145,12 +158,12 @@ function exec() {
     canv.width = 512;
     canv.height = 512;
     div.appendChild(canv);
-    
+
     // create a Drawing object
     myDrawing = new Drawing(canv);
-    
+
     // kick off the rendering!
-    myDrawing.render(); 
+    myDrawing.render();
 }
 
 exec();
