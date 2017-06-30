@@ -1,4 +1,4 @@
-mod userAuth;
+mod user_auth;
 #[cfg(test)]
 mod tests {
     #[test]
