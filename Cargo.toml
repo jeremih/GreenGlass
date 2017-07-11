@@ -4,3 +4,6 @@ version = "0.1.0"
 authors = ["Joseph Nam <josephknam@gmail.com>"]
 
 [dependencies]
+conrod = "0.53.0"
+piston_window = "*"
+chrono = "0.4"
